@@ -184,12 +184,12 @@ def get_token_class_dict():
                 # We must not process imported classes!
                 if obj.__module__ == module.__name__:
                     try:
-                        class_name = "%s.%s" % (module.__name__, obj.__name__)
+                        class_name = "{0!s}.{1!s}".format(module.__name__, obj.__name__)
                         tokenclass_dict[class_name] = obj
                         if hasattr(obj, 'get_class_type'):
                             tokentype_dict[class_name] = obj.get_class_type()
                     except Exception as e:  # pragma: no cover
-                        log.error("error constructing token_class_dict: %r" % e)
+                        log.error("error constructing token_class_dict: {0!r}".format(e))
 
     return tokenclass_dict, tokentype_dict
 
@@ -294,14 +294,14 @@ def get_machine_resolver_class_dict():
 
     modules = get_machine_resolver_module_list()
     for module in modules:
-        log.debug("module: %s" % module)
+        log.debug("module: {0!s}".format(module))
         for name in dir(module):
             obj = getattr(module, name)
             if inspect.isclass(obj) and \
                     (issubclass(obj, BaseMachineResolver)) and \
                     (obj != BaseMachineResolver):
                 try:
-                    class_name = "%s.%s" % (module.__name__, obj.__name__)
+                    class_name = "{0!s}.{1!s}".format(module.__name__, obj.__name__)
                     resolverclass_dict[class_name] = obj
                     resolvertype_dict[class_name] = obj.type
 
@@ -329,14 +329,14 @@ def get_caconnector_class_dict():
 
     modules = get_caconnector_module_list()
     for module in modules:
-        log.debug("module: %s" % module)
+        log.debug("module: {0!s}".format(module))
         for name in dir(module):
             obj = getattr(module, name)
             if inspect.isclass(obj) and \
                     (issubclass(obj, BaseCAConnector)) and \
                     (obj != BaseCAConnector):
                 try:
-                    class_name = "%s.%s" % (module.__name__, obj.__name__)
+                    class_name = "{0!s}.{1!s}".format(module.__name__, obj.__name__)
                     class_dict[class_name] = obj
                     type_dict[class_name] = obj.connector_type
 
@@ -371,7 +371,7 @@ def get_resolver_class_dict():
     modules = get_resolver_module_list()
     base_class_repr = "privacyidea.lib.resolvers.UserIdResolver.UserIdResolver"
     for module in modules:
-        log.debug("module: %s" % module)
+        log.debug("module: {0!s}".format(module))
         for name in dir(module):
             obj = getattr(module, name)
             # There are other classes like HMAC in the lib.tokens module,
@@ -381,7 +381,7 @@ def get_resolver_class_dict():
                 # We must not process imported classes!
                 # if obj.__module__ == module.__name__:
                 try:
-                    class_name = "%s.%s" % (module.__name__, obj.__name__)
+                    class_name = "{0!s}.{1!s}".format(module.__name__, obj.__name__)
                     resolverclass_dict[class_name] = obj
 
                     prefix = class_name.split('.')[1]
@@ -391,8 +391,7 @@ def get_resolver_class_dict():
                     resolverprefix_dict[class_name] = prefix
 
                 except Exception as e:  # pragma: no cover
-                    log.error("error constructing resolverclass_list: %r"
-                                 % e)
+                    log.error("error constructing resolverclass_list: {0!r}".format(e))
 
     return resolverclass_dict, resolverprefix_dict
 
@@ -418,7 +417,7 @@ def get_resolver_list():
     # TODO: Migration
     # config_modules = config.get("privacyideaResolverModules", '')
     config_modules = None
-    log.debug("%s" % config_modules)
+    log.debug("{0!s}".format(config_modules))
     if config_modules:
         # in the config *.ini files we have some line continuation slashes,
         # which will result in ugly module names, but as they are followed by
@@ -489,7 +488,7 @@ def get_token_list():
     # TODO: Migration
     # config_modules = config.get("privacyideaResolverModules", '')
     config_modules = None
-    log.debug("%s" % config_modules)
+    log.debug("{0!s}".format(config_modules))
     if config_modules:
         # in the config *.ini files we have some line continuation slashes,
         # which will result in ugly module names, but as they are followed by
@@ -514,7 +513,7 @@ def get_token_module_list():
     """
     # def load_resolver_modules
     module_list = get_token_list()
-    log.debug("using the module list: %s" % module_list)
+    log.debug("using the module list: {0!s}".format(module_list))
 
     modules = []
     for mod_name in module_list:
@@ -528,13 +527,12 @@ def get_token_module_list():
         #    modules.append(module)
         #else:
         try:
-            log.debug("import module: %s" % mod_name)
+            log.debug("import module: {0!s}".format(mod_name))
             module = importlib.import_module(mod_name)
             modules.append(module)
         except Exception as exx:  # pragma: no cover
             module = None
-            log.warning('unable to load resolver module : %r (%r)'
-                        % (mod_name, exx))
+            log.warning('unable to load resolver module : {0!r} ({1!r})'.format(mod_name, exx))
 
     return modules
 
@@ -550,7 +548,7 @@ def get_resolver_module_list():
 
     # def load_resolver_modules
     module_list = get_resolver_list()
-    log.debug("using the module list: %s" % module_list)
+    log.debug("using the module list: {0!s}".format(module_list))
 
     modules = []
     for mod_name in module_list:
@@ -558,13 +556,12 @@ def get_resolver_module_list():
             continue
 
         try:
-            log.debug("import module: %s" % mod_name)
+            log.debug("import module: {0!s}".format(mod_name))
             module = importlib.import_module(mod_name)
 
         except Exception as exx:  # pragma: no cover
             module = None
-            log.warning('unable to load resolver module : %r (%r)'
-                        % (mod_name, exx))
+            log.warning('unable to load resolver module : {0!r} ({1!r})'.format(mod_name, exx))
 
         if module is not None:
             modules.append(module)
@@ -587,13 +584,12 @@ def get_caconnector_module_list():
         mod_name = ".".join(mod_name.split(".")[:-1])
         class_name = mod_name.split(".")[-1:]
         try:
-            log.debug("import module: %s" % mod_name)
+            log.debug("import module: {0!s}".format(mod_name))
             module = importlib.import_module(mod_name)
 
         except Exception as exx:  # pragma: no cover
             module = None
-            log.warning('unable to load ca connector module : %r (%r)'
-                        % (mod_name, exx))
+            log.warning('unable to load ca connector module : {0!r} ({1!r})'.format(mod_name, exx))
 
         if module is not None:
             modules.append(module)
@@ -612,19 +608,18 @@ def get_machine_resolver_module_list():
 
     # def load_resolver_modules
     class_list = get_machine_resolver_class_list()
-    log.debug("using the class list: %s" % class_list)
+    log.debug("using the class list: {0!s}".format(class_list))
 
     modules = []
     for class_name in class_list:
         try:
             module_name = ".".join(class_name.split(".")[:-1])
-            log.debug("import module: %s" % module_name)
+            log.debug("import module: {0!s}".format(module_name))
             module = importlib.import_module(module_name)
 
         except Exception as exx:  # pragma: no cover
             module = None
-            log.warning('unable to load machine resolver module : %r (%r)'
-                        % (module_name, exx))
+            log.warning('unable to load machine resolver module : {0!r} ({1!r})'.format(module_name, exx))
 
         if module is not None:
             modules.append(module)

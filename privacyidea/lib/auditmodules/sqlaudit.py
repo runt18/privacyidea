@@ -140,7 +140,7 @@ class Audit(AuditBase):
         connect_string = self.config.get("PI_AUDIT_SQL_URI",
                                         self.config.get(
                                             "SQLALCHEMY_DATABASE_URI"))
-        log.debug("using the connect string %s" % connect_string)
+        log.debug("using the connect string {0!s}".format(connect_string))
         self.engine = create_engine(connect_string)
 
         # create a configured "Session" class
@@ -152,7 +152,7 @@ class Audit(AuditBase):
         try:
             metadata.create_all(self.engine)
         except OperationalError as exx:  # pragma: no cover
-            log.info("%r" % exx)
+            log.info("{0!r}".format(exx))
 
     @staticmethod
     def _create_filter(param):
@@ -176,7 +176,7 @@ class Audit(AuditBase):
                     except Exception as exx:
                         # The search_key was no search key but some
                         # bullshit stuff in the param
-                        log.debug("Not a valid searchkey: %s" % exx)
+                        log.debug("Not a valid searchkey: {0!s}".format(exx))
         # Combine them with or to a BooleanClauseList
         filter_condition = and_(*conditions)
         return filter_condition
@@ -250,9 +250,9 @@ class Audit(AuditBase):
                 self.session.merge(le)
                 self.session.commit()
         except Exception as exx:  # pragma: no cover
-            log.error("exception %r" % exx)
-            log.error("DATA: %s" % self.audit_data)
-            log.debug("%s" % traceback.format_exc())
+            log.error("exception {0!r}".format(exx))
+            log.error("DATA: {0!s}".format(self.audit_data))
+            log.debug("{0!s}".format(traceback.format_exc()))
             self.session.rollback()
 
         finally:
@@ -300,8 +300,8 @@ class Audit(AuditBase):
             if id_bef and id_aft:
                 res = True
         except Exception as exx:  # pragma: no cover
-            log.error("exception %r" % exx)
-            log.debug("%s" % traceback.format_exc())
+            log.error("exception {0!r}".format(exx))
+            log.debug("{0!s}".format(traceback.format_exc()))
             # self.session.rollback()
         finally:
             # self.session.close()
@@ -373,7 +373,7 @@ class Audit(AuditBase):
         for le in logentries:
             audit_dict = self.audit_entry_to_dict(le)
             audit_list = audit_dict.values()
-            string_list = ["'%s'" % x for x in audit_list]
+            string_list = ["'{0!s}'".format(x) for x in audit_list]
             yield ",".join(string_list)+"\n"
 
     def get_count(self, search_dict, timedelta=None, success=None):
@@ -444,8 +444,8 @@ class Audit(AuditBase):
                     limit).offset(offset)
                                          
         except Exception as exx:  # pragma: no cover
-            log.error("exception %r" % exx)
-            log.debug("%s" % traceback.format_exc())
+            log.error("exception {0!r}".format(exx))
+            log.debug("{0!s}".format(traceback.format_exc()))
             self.session.rollback()
         finally:
             self.session.close()
