@@ -85,8 +85,7 @@ def save_resolver(params):
     # check the type
     resolvertypes = get_resolver_types()
     if resolvertype not in resolvertypes:
-            raise Exception("resolver type : %s not in %s" %
-                            (resolvertype, unicode(resolvertypes)))
+            raise Exception("resolver type : {0!s} not in {1!s}".format(resolvertype, unicode(resolvertypes)))
 
     # check the name
     resolvers = get_resolver_list(filter_resolver_name=resolvername)
@@ -134,8 +133,8 @@ def save_resolver(params):
         if t not in data:
             _missing = True
     if _missing:
-        raise Exception("type or description without necessary data! %s" %
-                        unicode(params))
+        raise Exception("type or description without necessary data! {0!s}".format(
+                        unicode(params)))
 
     # Everything passed. So lets actually create the resolver in the DB
     if update_resolver:
@@ -323,7 +322,7 @@ def get_resolver_object(resolvername):
     r_obj_class = get_resolver_class(r_type)
 
     if r_obj_class is None:
-        log.error("Can not find resolver with name %s " % resolvername)
+        log.error("Can not find resolver with name {0!s} ".format(resolvername))
     else:
         # create the resolver instance and load the config
         r_obj = r_obj_class()

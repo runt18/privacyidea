@@ -180,11 +180,11 @@ def set_policy_api(name=None):
     admin_realm = getParam(param, "adminrealm", optional)
 
     g.audit_object.log({'action_detail': name,
-                        'info': "%s" % param})
+                        'info': "{0!s}".format(param)})
     ret = set_policy(name=name, scope=scope, action=action, realm=realm,
                      resolver=resolver, user=user, client=client,
                      active=active or True, adminrealm=admin_realm)
-    log.debug("policy %s successfully saved." % name)
+    log.debug("policy {0!s} successfully saved.".format(name))
     string = "setPolicy " + name
     res[string] = ret
     g.audit_object.log({"success": True})
@@ -263,8 +263,7 @@ def get_policy(name=None, export=None):
 
     P = g.policy_object
     if not export:
-        log.debug("retrieving policy name: %s, realm: %s, scope: %s"
-                  % (name, realm, scope))
+        log.debug("retrieving policy name: {0!s}, realm: {1!s}, scope: {2!s}".format(name, realm, scope))
 
         pol = P.get_policies(name=name, realm=realm, scope=scope, active=active)
         ret = send_result(pol)
@@ -277,8 +276,7 @@ def get_policy(name=None, export=None):
         ret = response
 
     g.audit_object.log({"success": True,
-                        'info': "name = %s, realm = %s, scope = %s" %
-                       (name, realm, scope)})
+                        'info': "name = {0!s}, realm = {1!s}, scope = {2!s}".format(name, realm, scope)})
     return ret
 
 
@@ -389,13 +387,13 @@ def import_policy_api(filename=None):
         file_contents = policy_file
 
     if file_contents == "":
-        log.error("Error loading/importing policy file. file %s empty!" %
-                  filename)
+        log.error("Error loading/importing policy file. file {0!s} empty!".format(
+                  filename))
         raise ParameterError("Error loading policy. File empty!")
 
     policy_num = import_policies(file_contents=file_contents)
     g.audit_object.log({"success": True,
-                        'info': "imported %d policies from file %s" % (
+                        'info': "imported {0:d} policies from file {1!s}".format(
                             policy_num, filename)})
 
     return send_result(policy_num)
@@ -481,7 +479,7 @@ def check_policy_api():
         policy_names = []
         for pol in policies:
             policy_names.append(pol.get("name"))
-        g.audit_object.log({'info': "allowed by policy %s" % policy_names})
+        g.audit_object.log({'info': "allowed by policy {0!s}".format(policy_names)})
     else:
         res["allowed"] = False
         res["info"] = "No policies found"
